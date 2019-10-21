@@ -1,0 +1,194 @@
+<form id="searchForm">
+    <table class="table form" style="display: none">
+        <tr>
+            <td width="10%">文件id</td>
+            <td>
+                <input name="logFileId" class="form-control" type="text">
+            </td>
+
+            <td width="10%">创建时间</td>
+            <td>
+                <input name="createTime" class="form-control" type="text">
+            </td>
+
+            <td width="10%">最后更新时间</td>
+            <td>
+                <input name="updateTime" class="form-control" type="text">
+            </td>
+        </tr>
+        <tr>
+            <td width="10%">日志类型</td>
+            <td>
+                <input name="logType" class="form-control" type="text">
+            </td>
+
+            <td width="10%">任务状态</td>
+            <td>
+                <input name="taskState" class="form-control" type="text">
+            </td>
+
+            <td width="10%">执行任务的服务器</td>
+            <td>
+                <input name="runningServer" class="form-control" type="text">
+            </td>
+        </tr>
+        <tr>
+            <td width="10%">执行任务所用端口</td>
+            <td>
+                <input name="runningPort" class="form-control" type="text">
+            </td>
+        </tr>
+        <tr>
+            <td width="10%">执行任务的程序</td>
+            <td>
+                <input name="runningApp" class="form-control" type="text">
+            </td>
+        </tr>
+        <tr>
+            <td width="10%">执行任务的用户名</td>
+            <td>
+                <input name="username" class="form-control" type="text">
+            </td>
+        </tr>
+        <tr>
+            <td width="10%">执行任务的密码</td>
+            <td>
+                <input name="passwd" class="form-control" type="text">
+            </td>
+        </tr>
+        <tr>
+            <td width="10%">执行任务的目录</td>
+            <td>
+                <input name="workdir" class="form-control" type="text">
+            </td>
+        </tr>
+        <tr>
+            <td width="10%">每次读取间隔</td>
+            <td>
+                <input name="intervalSecond" class="form-control" type="text">
+            </td>
+        </tr>
+        <tr>
+            <td width="10%">第一次运行延时</td>
+            <td>
+                <input name="delaySecond" class="form-control" type="text">
+            </td>
+        </tr>
+        <tr>
+            <td width="10%">单次读取字节数</td>
+            <td>
+                <input name="batchSzie" class="form-control" type="text">
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <button type="button" id="btnSelect" class="btn btn-primary">查询</button>
+            </td>
+        </tr>
+    </table>
+</form>
+
+<div id="toolbar" class="btn-group">
+    <button id="btnAdd" type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+    </button>
+    <button id="btnUpdate" type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改
+    </button>
+    <button id="btnDelete" type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+    </button>
+</div>
+
+<table id="queryResult"></table>
+
+<script>
+    var tableDiv = 'queryResult';
+    var searchForm = 'searchForm';
+    var pkName= "logTaskId";
+    var appData = {
+        logTaskId: "",
+        logFileId: "",
+        createTime: "",
+        updateTime: "",
+        logType: "",
+        taskState: "",
+        runningServer: "",
+        runningPort: "",
+        runningApp: "",
+        username: "",
+        passwd: "",
+        workdir: "",
+        intervalSecond: "",
+        delaySecond: "",
+        batchSzie: "",
+    }
+    var vue = vueUtil.init({
+        el: "#searchForm",
+        data: appData
+    })
+
+    tableEvents = {
+        "click #btnTop": function (e, value, row, index) {
+            var data = "logTaskId="+row.logTaskId;
+            ajaxUtil.data("$path/stop", data, function (ret) {
+                dialog.alert(ret);
+            })
+        },
+        "click #btnStart": function (e, value, row, index) {
+            var data = "logTaskId="+row.logTaskId;
+            ajaxUtil.data("$path/start", data, function (ret) {
+                dialog.alert(ret);
+            })
+        },
+    };
+
+    btnOperate = function (value, row, index) {
+        if(row.taskState=='running'){
+            return '<button id="btnStop" class="btn-small btn-danger">停止</button>';
+        }else{
+            return '<button id="btnStart" class="btn-small btn-success">启动</button>';
+        }
+    };
+
+    $(function () {
+        var columns = [
+            {checkbox: true},
+            {field: 'logTaskId', title: '主键',visible: false},
+            {field: 'createTime', title: '创建时间',formatter:tableUtil.dateToString},
+            {field: 'updateTime', title: '最后更新时间',formatter:tableUtil.dateToString},
+            {field: 'runningServer', title: '执行任务的服务器'},
+            {field: 'runningPort', title: '执行任务所用端口'},
+            {field: 'workdir', title: '工作目录'},
+            {field: 'intervalSecond', title: '每次读取间隔'},
+            {field: 'delaySecond', title: '第一次运行延时'},
+            {field: 'batchSzie', title: '单次读取字节数'},
+            {field: 'taskState', title: '当前状态'},
+            {title: "操作", formatter: btnOperate, events: tableEvents, visible: true},
+        ]
+        tableUtil.init(tableDiv, columns, '$path/select', function (config) {
+            config.uniqueId = pkName;
+            if("$!logTask.logTaskId"){
+                tableUtil.queryParam={"logTaskId":"$!logTask.logTaskId"}
+            }
+        });
+    });
+
+    $('#btnAdd').click(function () {
+        loadPage("${path}/prepareInsert")
+    });
+
+    $("#btnUpdate").click(function () {
+        frame.update(pkName, "修改", '${path}/prepareUpdate', '$path/updateById');
+    });
+
+    $("#btnDelete").click(function () {
+        frame.delete(pkName, '$path/deleteById');
+    });
+
+    $("#btnSelect").click(function () {
+        frame.search(searchForm, '$path/select', vue)
+    });
+</script>
+

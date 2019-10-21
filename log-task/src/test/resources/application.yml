@@ -1,0 +1,11 @@
+my:
+  task:
+    task-id: 11
+    port: 8080
+    servename: myos
+    interval-second: 30
+    delay-second: 30
+    beginPattern: "[\d|\-|:|.| ]{23}(.|\s)*"
+    dateFormat: "yyyy-MM-dd HH:mm:ss.SSS"
+    charset: "UTF-8"
+    batch-size: 65536

@@ -1,0 +1,131 @@
+<div id="app">
+    <table class="table table-bordered ">
+        <tr>
+            <td width="10%">日志文件</td>
+            <td colspan="3">
+                <select class="form-control" name="logFile.logFileId" v-validate="'required'">
+                    #foreach($file in $logFileList)
+                    <option value="${file.logFileId}">${file.path}@${file.serverInfo.hostName}-----${file.fileNameRegx}
+                    </option>
+                    #end
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td width="10%">程序运行服务器</td>
+            <td width="40%">
+                <select class="form-control" name="logFile.runningServer" v-validate="'required'">
+                    #foreach($server in $serverInfoList)
+                    <option value="${server.hostName}">${server.hostName}--${server.ipAddr}</option>
+                    #end
+                </select>
+            </td>
+            <td width="10%">运行端口</td>
+            <td width="40%">
+                <input name="logFile.runningPort" class="form-control" type="text" v-validate="'required|integer'"
+                       maxlength="5">
+            </td>
+        </tr>
+
+        <tr>
+            <td>执行任务的用户名</td>
+            <td>
+                <input name="logFile.username" class="form-control" type="text" v-validate="'required'">
+            </td>
+            <td>执行任务的密码</td>
+            <td>
+                <input name="logFile.passwd" class="form-control" type="text" v-validate="'required'">
+            </td>
+        </tr>
+        <tr>
+            <td>工作目录</td>
+            <td>
+                <input name="logFile.workdir" class="form-control" type="text" v-validate="'required'">
+            </td>
+            <td>单次读取字节数(B)</td>
+            <td>
+                <input name="logFile.batchSzie" class="form-control" type="text" v-validate="'required|integer'"
+                       maxlength="10">
+            </td>
+        </tr>
+        <tr>
+            <td>第一次运行延时</td>
+            <td>
+                <input name="logFile.delaySecond" class="form-control" type="text" v-validate="'required|integer'"
+                       maxlength="3">
+            </td>
+            <td>每次读取间隔</td>
+            <td>
+                <input name="logFile.intervalSecond" class="form-control" type="text" v-validate="'required|integer'"
+                       maxlength="3">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                <button class="btn btn-info" onclick="doTest()">测试</button>
+                <button class="btn btn-success" onclick="doAdd()">创建</button>
+            </td>
+        </tr>
+    </table>
+    <div class="box box-solid" v-show="testResult.portInfo!=''">
+        <h4 class="box-header with-border">端口<span style="color: red">{{logFile.runningPort}}</span>已被占用</h4>
+        <pre>{{testResult.portInfo}}</pre>
+    </div>
+
+    <div class="box box-solid" v-show="testResult.fileReadInfos.length>0">
+        <div class="box-header with-border">文件信息</div>
+        <table class="table list">
+            <tr>
+                <th>文件名</th>
+                <th>最后修改时间</th>
+                <th>文件大小</th>
+                <th>已读大小</th>
+            </tr>
+            <tr v-for="read in testResult.fileReadInfos">
+                <td>{{read.fileInfo.fileName}}</td>
+                <td>{{read.fileInfo.modify.toDateTime()}}</td>
+                <td>{{read.fileInfo.size.fileSize()}}</td>
+                <td v-if="read.logTaskDetail!=null">{{read.logTaskDetail.readLength}} </td>
+                <td v-else>0</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<script>
+    var appData = {
+        logFile: {
+            logFileId: "$!logFileId",
+            logType: "",
+            taskState: "",
+            runningServer: "",
+            runningPort: 8080,
+            runningApp: "",
+            username: "root",
+            passwd: "root",
+            workdir: "/opt/logtask",
+            intervalSecond: 60,
+            delaySecond: 5,
+            batchSzie: 65536,
+        },
+        testResult: {
+            portInfo: "",
+            fileReadInfos: []
+        }
+    }
+    var vue = vueUtil.init({
+        el: "#app",
+        data: appData
+    })
+
+    function doTest() {
+        vueUtil.submit(vue, "$path/doTest", appData.logFile, function (data) {
+            appData.testResult = data;
+        })
+    }
+
+    function doAdd() {
+        vueUtil.submit(vue, "$path/insert", appData.logFile, function (data) {
+            loadPage("$path/index?logTaskId="+data.logTaskId)
+        })
+    }
+</script>

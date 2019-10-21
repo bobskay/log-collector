@@ -1,0 +1,7 @@
+book=BookInfo(bookId=1, bookName=这是一个很长的字符串, publication=Wed Jan 31 00:00:00 CST 2018, price=10, createTime=Wed Jan 31 12:13:14 CST 2018, valid=false, user=null)
+bookId=1
+bookName=这是一...
+publication=2018-01-31
+price=10
+createTime=2018-01-31 12:13:14
+valid=否

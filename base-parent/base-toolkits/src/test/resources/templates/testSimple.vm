@@ -1,0 +1,7 @@
+book=$book
+bookId=$book.bookId
+bookName=$book.bookName.substring(3)
+publication=$book.publication.date
+price=$book.price
+createTime=$book.createTime.dateTime
+valid=$book.valid.yesOrNo()

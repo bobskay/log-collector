@@ -1,0 +1,19 @@
+<table class="table table-bordered ">
+	<tr>
+		<td width="20%">host</td>
+		<td width="80%">
+			<input type="hidden" name="serverInfoId" :value="serverInfoId">
+			<input class="form-control" name="host"  v-validate="'required|hostname'" maxlength="50"/>
+		</td>
+	</tr>
+	<tr>
+		<td width="20%">ip</td>
+		<td width="80%">
+			<input class="form-control" name="ip"  v-validate="'required|ip'" maxlength="15"/>
+		</td>
+	</tr>
+</table>
+<script>
+	//这个名称是固定的,在frame.js里需要用到
+	var updateData=$html.json($serverInfo)
+</script>

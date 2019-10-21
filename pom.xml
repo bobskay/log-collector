@@ -1,0 +1,60 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>wang.wangby</groupId>
+        <artifactId>base-parent</artifactId>
+        <version>0.1</version>
+    </parent>
+
+    <groupId>wang.wangby</groupId>
+    <artifactId>log-collector-parent</artifactId>
+    <version>0.1</version>
+    <packaging>pom</packaging>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <velocity.version>1.7</velocity.version>
+        <my.version>0.1</my.version>
+        <byte-buddy.version>1.7.10</byte-buddy.version>
+        <powermock-verion>1.6.6</powermock-verion>
+        <mockito.version>1.10.19</mockito.version>
+        <fastjson.version>1.2.47</fastjson.version>
+    </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>wang.wangby</groupId>
+                <artifactId>log-collector-service</artifactId>
+                <version>${my.version}</version>
+            </dependency>
+        </dependencies>
+
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>wang.wangby</groupId>
+            <artifactId>base-test</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>wang.wangby</groupId>
+            <artifactId>base-toolkits</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>wang.wangby</groupId>
+            <artifactId>base-auto-configuration</artifactId>
+        </dependency>
+    </dependencies>
+
+    <modules>
+        <module>log-collector-service</module>
+        <module>log-task</module>
+        <module>log-manager</module>
+    </modules>
+</project>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>个人博客</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/AdminLTE.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+
+    <!-- Google Font -->
+    <link rel="stylesheet" href="css/googleFont.css">
+</head>
+<body class="hold-transition skin-blue sidebar-mini ">
+<div class="wrapper" id="mainApp" style="display:none;">
+
+    <header class="main-header">
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini">Blog</span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg">{{title}}</span>
+        </a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#">退出</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+
+            <div class="nav-tabs-custom" style="background-color: #367fa9">
+                <ul class="nav nav-tabs" >
+                    <li class="active"><a href="#menu" data-toggle="tab">菜单</a></li>
+                    <li><a href="#catgories" data-toggle="tab">目录</a></li>
+                </ul>
+                <div class="tab-content" style="background: #222d32">
+                    <div class="tab-pane active" id="menu">
+                        <ul class="sidebar-menu">
+                        <li>
+                            <a href="javscript:" @click="load('pages/UI/general.html')">
+                                <i class="fa fa-search"></i> <span>首页</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javscript:" @click="loadPage('pages/search.html')">
+                                <i class="fa fa-search"></i> <span>搜索</span>
+                            </a>
+                        </li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane" id="catgories">
+                        <ul class="sidebar-menu">
+                            <li class="treeview"  v-for="first in menus" >
+                                <a href="javscript:" @click="load(first.url)">
+                                    <i :class="first.icon"></i> <span>{{first.name}}</span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li class="treeview" v-for="second in first.children" name="blogLi">
+                                        <a href="javascript:" @click="load(second.url)"><i :class="second.icon"></i> {{second.name}}
+                                        </a>
+                                        <ul class="treeview-menu">
+                                            <li  v-for="third in second.children">
+                                                <a href="javascript:" @click="load(third.url)"><i class="fa fa-book"></i> {{third.name}}</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper" id="main-content"  >
+
+
+    </div>
+
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 3 -->
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+    $.widget.bridge('uibutton', $.ui.button);
+</script>
+<!-- Bootstrap 3.3.7 -->
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/adminlte.js"></script>
+
+<script src="bower_components/vue/vue.min.js"></script>
+<script src="bower_components/vue/vee-validate.min.js"></script>
+<script src="bower_components/vue/vue-i18n.min.js"></script>
+
+<script src="js/utils.js"></script>
+<script src="js/dialog.js"></script>
+<script src="js/ajaxUtil.js"></script>
+<script src="js/vueUtil.js"></script>
+
+</body>
+
+<script>
+    devModel=true;
+    var appData = {
+        "title": "个人工具箱",
+        "menus": []
+    }
+
+
+    function loadPage(url){
+        if(!url){
+            return ;
+        }
+        var newUrl = window.location.href.split('?')[0]+"?forward="+url;
+        window.history.pushState({},0,newUrl);
+        ajaxUtil.html(url,"",function (html) {
+            $("#main-content").html(html);
+        })
+    }
+
+    function loadBlog(url) {
+        if(!url){
+            return;
+        }
+        $("body").css("overflow-y","hidden");
+        var newUrl = window.location.href.split('?')[0]+"?iframe="+url;
+        window.history.pushState({},0,newUrl);
+        var header = $(".main-header").height();
+        var height = document.documentElement.clientHeight - header - 1;
+        var iframe='<iframe style="border: 0" id="contentIframe" width="100%"  src="'+url+'"></iframe>'
+        $("#main-content").html(iframe);
+        $("#contentIframe").css("height", height);
+    }
+    $(function () {
+        ajaxUtil.json("data/menu.json", "", function (menus) {
+            var menus=menus[0].children;
+            for(var i=0;i<menus.length;i++){
+                if(menus[i].name=='编码'){
+                    menus[i].icon="fa fa-keyboard-o";
+                }else if(menus[i].name=='设计'){
+                    menus[i].icon="fa fa-pencil-square-o";
+                }else if(menus[i].name=='运维'){
+                    menus[i].icon="fa fa-desktop";
+                }else {
+                    menus[i].icon="fa  fa-file-text-o";
+                }
+            }
+            var root=[{
+                children:menus,
+                name:"目录",
+                icon: "fa fa-book"
+            }]
+            appData.menus = menus;
+            new Vue({
+                "el": "#mainApp",
+                "data": appData,
+                "methods": {
+                    load: loadBlog,
+                    loadPage: loadPage
+                }
+            });
+
+            var tree=$('.sidebar-menu').tree().data("lte.tree")
+            tree.expandAll()
+            $("#mainApp").show();
+
+            //loadPage('pages/search.html')
+            //loadBlog("http://myos:3000/d/nvLGLmTZz/jvm?orgId=1&from=1571372822359&to=1571376422359");
+
+           // loadBlog("pages/UI/general.html");
+        });
+    })
+</script>
+</html>

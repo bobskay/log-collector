@@ -1,0 +1,88 @@
+<form id="searchForm">
+    <table class="table form">
+        <tr>
+            <td width="10%" align="right" valign="middle">所在服务器</td>
+            <td width="23%">
+                <select class="form-control" name="logFile.serverInfoId">
+                    #foreach($server in $serverInfoList)
+                    <option value="${server.serverInfoId}">${server.hostName}--${server.ipAddr}</option>
+                    #end
+                </select>
+            </td>
+            <td width="10%">用户名</td>
+            <td width="23%">
+                <input name="logFile.username" class="form-control" type="text">
+            </td>
+            <td width="10%">密码</td>
+            <td width="23%">
+                <input name="logFile.passwd" class="form-control" type="text">
+            </td>
+
+        </tr>
+        <tr>
+            <td>路径</td>
+            <td colspan="=5">
+                <input name="logFile.path" class="form-control" type="text">
+            </td>
+        </tr>
+        <tr>
+            <td>文件匹配规则</td>
+            <td colspan="2">
+                <input name="logFile.fileNameRegx" class="form-control" type="text">
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="6">
+                <button type="button" id="btnTest" class="btn btn-primary">测试</button>
+                <button type="button" id="btnAdd" class="btn btn-primary">新增</button>
+            </td>
+        </tr>
+    </table>
+
+    <table class="table list">
+        <tr>
+            <th>目录</th>
+            <th>文件名</th>
+            <th>是否匹配</th>
+        </tr>
+        <tr v-for="result in searchResult">
+            <td>{{result.dir}}</td>
+            <td>{{result.name}}</td>
+            <td v-show="result.match==true">true</td>
+            <td v-show="result.match==false"><span style="color: red">false</span></td>
+        </tr>
+    </table>
+</form>
+
+
+<script>
+    var appData = {
+        logFile:{
+            logFileId: "",
+            serverInfoId: "",
+            path: "",
+            fileNameRegx: "",
+            username: "",
+            passwd: "",
+        },
+        searchResult: [],
+
+    }
+    vueUtil.init({
+        el: "#searchForm",
+        data: appData
+    })
+
+    $("#btnTest").click(function () {
+        ajaxUtil.postJson("$path/searchFile",appData.logFile,function (result) {
+            appData.searchResult=result;
+        })
+    });
+
+    $("#btnAdd").click(function () {
+        ajaxUtil.postJson("$path/insert",appData.logFile,function (result) {
+             loadPage("$path/list?logFileId="+result.logFileId);
+        })
+    });
+</script>
