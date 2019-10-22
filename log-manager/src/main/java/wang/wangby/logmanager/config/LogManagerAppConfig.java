@@ -5,20 +5,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import wang.wangby.config.DaoAutoConfiguration;
-import wang.wangby.utils.shell.ShellClient;
+import wang.wangby.web.tools.controller.config.ToolsAutoConfiguration;
 
 @Configuration
-@Import(DaoAutoConfiguration.class)
+@Import({DaoAutoConfiguration.class, ToolsAutoConfiguration.class})
 public class LogManagerAppConfig {
 
-    @Bean
-    public ShellClient shellClient(){
-       return new ShellClient(60*10,"logManager");
-    }
+
 
     @Bean
     @ConfigurationProperties(prefix = "my.task-manager")
     public LogManagerProperties logManagerProperties(){
         return new LogManagerProperties();
     }
+
 }

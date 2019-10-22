@@ -139,4 +139,11 @@ public class LogTaskController extends BaseController {
             return Response.fail("启动任务失败:"+ex.getMessage());
         }
     }
+
+    @Remark("停止划任务")
+    @RequestMapping("stop")
+    public Response<String> stop(Long logTaskId){
+        logTaskService.stop(logTaskId);
+        return  respone("ok");
+    }
 }

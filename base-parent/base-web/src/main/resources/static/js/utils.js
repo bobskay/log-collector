@@ -1,3 +1,4 @@
+devModel=true;
 //g全局,m多行
 String.prototype.replaceAll = function (from, to) {
     return this.replace(new RegExp(from, "gm"), to);

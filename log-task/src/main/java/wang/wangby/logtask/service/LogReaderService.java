@@ -173,6 +173,10 @@ public class LogReaderService implements InitializingBean {
     //检查当前执行任务的程序和系统配置的是否相同,如果发现不同就退出
     private LogTask check() {
         LogTask task = logTaskService.get(taskConfig.getTaskId());
+        if(!LogTask.State.running.toString().equals(task.getTaskState())){
+            log.error("任务状态不是运行中:" + task.getTaskState());
+            System.exit(1);
+        }
         if (task == null) {
             log.error("通过任务id无法找到任务信息:" + taskConfig.getTaskId());
             System.exit(1);

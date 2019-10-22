@@ -43,7 +43,7 @@
                 <li class="treeview">
                     <a href="javscript:" onclick="loadPage('$!menu.url',this)" url="$!menu.url" text="$menu.text">
                         <i class="fa fa-$menu.icon"></i> <span>$menu.text</span>
-                        #if($menu.children.size()>0)
+                        #if($!menu.children.size()>0)
                         <span class="pull-right-container">
                           <i class="fa fa-angle-left pull-right"></i>
                         </span>

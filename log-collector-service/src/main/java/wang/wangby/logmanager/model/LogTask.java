@@ -12,6 +12,10 @@ import java.util.Date;
 @Table("t_logTask")
 @Remark("")
 public class LogTask extends BaseModel{
+    public  static enum  State{
+        running,stop
+    }
+
     @Id
     @Remark("主键")
     private Long logTaskId;
@@ -64,5 +68,6 @@ public class LogTask extends BaseModel{
 
     @Remark("单次读取字节数")
     private Integer batchSzie;
+
 
 }

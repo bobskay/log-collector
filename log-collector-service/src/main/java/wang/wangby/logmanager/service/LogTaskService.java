@@ -1,7 +1,5 @@
 package wang.wangby.logmanager.service;
 
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.SftpException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,12 +13,13 @@ import wang.wangby.logmanager.model.vo.FileReadInfo;
 import wang.wangby.logmanager.model.vo.TaskRunningInfo;
 import wang.wangby.service.BaseService;
 import wang.wangby.utils.IdWorker;
+import wang.wangby.utils.StringUtil;
+import wang.wangby.utils.shell.LongTimeShellPool;
 import wang.wangby.utils.shell.Shell;
 import wang.wangby.utils.shell.ShellClient;
 import wang.wangby.utils.shell.file.FileInfo;
 import wang.wangby.utils.shell.file.RemoteFile;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +36,9 @@ public class LogTaskService extends BaseService<LogTask> {
     LogFileService logFileService;
     @Autowired
     LogTaskService logTaskService;
+    @Autowired
+    LongTimeShellPool longTimeShellPool;
+
 
     public BaseDao defaultDao() {
         return logTaskDao;
@@ -83,12 +85,22 @@ public class LogTaskService extends BaseService<LogTask> {
     /**
      * jarFile 允许程序所在路径
      * */
-    public LogTask run(Long logTaskId,String jarFile) throws JSchException, SftpException, IOException {
+    public LogTask run(Long logTaskId,String jarFile) throws Exception {
         LogTask logTask=this.get(logTaskId);
         Shell shell=shellClient.getShell(logTask.getRunningServer(),logTask.getUsername(),logTask.getPasswd());
-        String name="logTask"+IdWorker.nextString()+".jar";
-        String target=logTask.getWorkdir()+"/"+name;
-        logTask.setRunningApp(name);
+        String pid=shell.getPid(logTask.getRunningPort());
+        if(StringUtil.isNotEmpty(pid)){
+            throw new Message("端口已被程序占用,请先手动关闭:pid="+pid);
+        }
+
+
+        //创建目录
+        String dir=logTask.getWorkdir()+"/"+ IdWorker.nextString();
+        shell.exec("mkdir -p "+dir);
+        String fileName="logTask.jar";
+        String target=dir+"/"+fileName;
+        logTask.setRunningApp(target);
+
         shell.upload(jarFile,target);
 
         RemoteFile remoteFile=new RemoteFile(shell);
@@ -96,8 +108,11 @@ public class LogTaskService extends BaseService<LogTask> {
         if(file==null){
             throw new Message("上传程序文件出错");
         }
-        shell.exec("java -jar "+target+" "+crateArg(logTask));
-        this.updateField("appName",name,logTask.getRunningApp(),logTaskId);
+        String command="cd "+dir+"&& java -jar "+target+" "+crateArg(logTask);
+        longTimeShellPool.addShell(command,logTask.getRunningServer(),logTask.getUsername(),logTask.getPasswd(),true,false);
+        logTask.setRunningApp(target);
+        logTask.setTaskState(LogTask.State.running+"");
+        this.update(logTask);
         return logTask;
     }
 
@@ -107,5 +122,11 @@ public class LogTaskService extends BaseService<LogTask> {
         sb.append(" --my.task.serverName="+logTask.getRunningServer());
         sb.append(" --server.port="+logTask.getRunningPort());
         return sb.toString();
+    }
+
+    public void stop(Long logTaskId) {
+        LogTask logTask=this.get(logTaskId);
+        logTask.setTaskState(LogTask.State.stop+"");
+        this.update(logTask);
     }
 }

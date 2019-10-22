@@ -26,6 +26,7 @@
     </appender>
 
     <logger name="wang.wangby" level="debug" addtivity="false"/>
+    <logger name="wang.wangby.utils.threadpool" level="info" addtivity="false"/>
 
     <root level="info">
         <appender-ref ref="stdout"/>
