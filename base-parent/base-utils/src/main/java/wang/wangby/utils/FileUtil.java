@@ -1,26 +1,17 @@
 package wang.wangby.utils;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.RandomAccessFile;
+import lombok.Cleanup;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import wang.wangby.annotation.Remark;
+import wang.wangby.annotation.api.Return;
+
+import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import lombok.Cleanup;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class FileUtil {
@@ -162,5 +153,36 @@ public class FileUtil {
 
         }
         return "/"+fullname;
+    }
+
+    //遍历某个目录下的所有目录和文件
+    public static void iterator(File root, FileConsumer fileConsumer){
+        for(File f:root.listFiles()){
+            if(!fileConsumer.apply(root,f)){
+                return;
+            }
+            if(f.isDirectory()){
+                iterator(f,fileConsumer);
+            }
+        }
+    }
+
+    //遍历某个目录下的所有文件
+    public static void iteratorFile(File root, FileConsumer fileConsumer){
+        for(File f:root.listFiles()){
+            if(f.isDirectory()){
+                iterator(f,fileConsumer);
+            }else{
+                if(!fileConsumer.apply(root,f)){
+                    return;
+                }
+            }
+        }
+    }
+
+    public interface FileConsumer{
+        @Remark("读取扫描到的文件")
+        @Return(("是否继续遍历当前目录"))
+        boolean apply(File dir,File file);
     }
 }

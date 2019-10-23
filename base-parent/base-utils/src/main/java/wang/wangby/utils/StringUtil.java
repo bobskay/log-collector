@@ -409,4 +409,19 @@ public class StringUtil {
 		}
 		return sb.substring(0,sb.length()-1)+"]";
 	}
+
+	public static String showSize(long sizeB){
+		if(sizeB<1024){
+			return sizeB+"B";
+		}
+		double size=sizeB/1024D;
+		if(size<1024){
+			return StringUtil.round(size)+"K";
+		}
+		size=size/1024D;
+		if(size<1024){
+			return StringUtil.round(size)+"M";
+		}
+		return StringUtil.round(size)+"G";
+	}
 }

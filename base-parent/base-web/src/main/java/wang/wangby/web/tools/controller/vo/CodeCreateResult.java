@@ -1,8 +1,8 @@
 package wang.wangby.web.tools.controller.vo;
 
 import lombok.Data;
-import wang.wangby.dao.model.TableInfo;
 import wang.wangby.utils.StringUtil;
+import wang.wangby.utils.dao.model.TableInfo;
 
 import java.util.List;
 
@@ -47,5 +47,9 @@ public class CodeCreateResult {
     //首字母大写的modelName
     public String ModelName() {
         return StringUtil.firstUp(modelName);
+    }
+
+    public String getUpPkName(){
+        return StringUtil.firstUp(pkName);
     }
 }

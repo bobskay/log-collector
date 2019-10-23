@@ -3,9 +3,7 @@ package wang.wangby.web.config;
 import lombok.Data;
 import wang.wangby.annotation.Remark;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Data
 public class IndexPageProperties {
@@ -17,4 +15,6 @@ public class IndexPageProperties {
     private String indexContentUrl;
     @Remark("图标")
     private Map<String,String> icon=new HashMap<>();
+    @Remark("要忽略的菜单")
+    private List<String> ignoreMenus=new ArrayList<>();
 }

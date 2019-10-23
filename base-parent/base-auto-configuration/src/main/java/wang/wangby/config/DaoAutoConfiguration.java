@@ -2,6 +2,7 @@ package wang.wangby.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @Configuration
 @Import(BaseConfig.class)
+@ConditionalOnClass(SqlSessionFactory.class)
 @Slf4j
 public class DaoAutoConfiguration {
 
@@ -31,7 +33,7 @@ public class DaoAutoConfiguration {
 
     @Bean
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource, DaoProperties daoProperties,TemplateUtil templateUtil) throws Exception {
-        log.debug("准备创建SqlSessionFactory,数据源={},系统配置={}",dataSource,daoProperties);
+        log.debug("准备创建SqlSessionFactory,数据源={},系统配置={}",dataSource.getClass().getSimpleName(),daoProperties);
         MapperCreator mapperCreator=new MapperCreator(templateUtil,daoProperties);
         DaoConfig config=new DaoConfig();
         List<Resource> resources=config.getMybatisMapperResource(mapperCreator);

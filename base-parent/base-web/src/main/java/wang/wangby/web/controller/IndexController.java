@@ -26,7 +26,6 @@ public class IndexController extends BaseController implements ApplicationContex
     public String index(String forward) {
         Map map=new HashMap();
         map.put("title",indexPageProperties.getTitle());
-        map.put("title",indexPageProperties.getTitle());
         map.put("jsList", indexPageProperties.getJs());
         if(StringUtil.isEmpty(forward)){
             forward=indexPageProperties.getIndexContentUrl();

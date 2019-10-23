@@ -135,6 +135,10 @@
 
         var title = aLink.attr("text");
 
+        //避免死循环如果转发到首页,直接跳过
+        if(!url||url=="/index"){
+            return;
+        }
         var newUrl = window.location.href.split('?')[0] + "?forward=" + url;
         window.history.pushState({}, 0, newUrl);
         ajaxUtil.html(url, "", function (html) {
@@ -148,7 +152,7 @@
     $(function () {
         var tree = $('.sidebar-menu').tree().data("lte.tree")
         tree.expandAll()
-        var forward=utils.getParam("forward");
+        var forward="$!forward"
         if(forward){
             loadPage(forward);
         }

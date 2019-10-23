@@ -1,0 +1,18 @@
+my:
+  web:
+    index:
+      title: "代码生成器"
+      indexContentUrl: "/codeBuilder/index"
+      ignore-menus: ["工具箱"]
+
+spring:
+  datasource:
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.2.11:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    druid:
+      max-wait: 3000
+
+  application:
+    name: log-manager

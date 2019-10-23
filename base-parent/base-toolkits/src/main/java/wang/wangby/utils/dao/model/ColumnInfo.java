@@ -1,4 +1,4 @@
-package wang.wangby.dao.model;
+package wang.wangby.utils.dao.model;
 
 import lombok.Data;
 import wang.wangby.annotation.Remark;
@@ -6,6 +6,7 @@ import wang.wangby.annotation.Remark;
 @Data
 @Remark("数据库列信息")
 public class ColumnInfo {
+
 
 	@Remark("表名")
 	private String tableName;

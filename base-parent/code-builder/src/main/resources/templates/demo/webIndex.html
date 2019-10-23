@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>${title}</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="$webroot/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="$webroot/bower_components/bootstrap-table/css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="$webroot/bower_components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="$webroot/bower_components/Ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="$webroot/dist/css/AdminLTE.css">
+    <link rel="stylesheet" href="$webroot/dist/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="$webroot/css/googleFont.css">
+    <link rel="stylesheet" href="$webroot/css/index.css">
+</head>
+<body class="hold-transition skin-blue sidebar-mini ">
+<div class="wrapper" id="mainApp">
+
+    <header class="main-header">
+        <a href="$webroot/index.html" class="logo">
+            <span class="logo-mini">--</span>
+            <span class="logo-lg">${title}</span>
+        </a>
+        <nav class="navbar navbar-static-top">
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#">退出</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <!--页面主体内容,通过ajax获取-->
+    <div class="content-wrapper" style="background-color: white">
+        <section class="content-header">
+            <h1 id="contentTitle"></h1>
+        </section>
+
+        <section class="content" id="main-content">
+        </section>
+    </div>
+
+</div>
+<script src="$webroot/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="$webroot/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script>
+    $.widget.bridge('uibutton', $.ui.button);
+</script>
+<script src="$webroot/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="$webroot/bower_components/bootstrap-table/js/bootstrap-table.min.js"></script>
+<script src="$webroot/bower_components/bootstrap-table/js/bootstrap-table-zh_CN.min.js"></script>
+
+<script src="$webroot/dist/js/adminlte.js"></script>
+
+<script src="$webroot/bower_components/vue/vue.min.js"></script>
+<script src="$webroot/bower_components/vue/vee-validate.min.js"></script>
+<script src="$webroot/bower_components/vue/vue-i18n.min.js"></script>
+
+<script src="$webroot/js/utils.js"></script>
+<script src="$webroot/js/dialog.js"></script>
+<script src="$webroot/js/ajaxUtil.js"></script>
+<script src="$webroot/js/vueUtil.js"></script>
+<script src="$webroot/js/tableUtil.js"></script>
+<script src="$webroot/js/frame.js"></script>
+
+</body>
+
+<script>
+    $(function () {
+        var config=$html.json($codeConfig);
+        ajaxUtil.post("$path/index", config, function (html) {
+            $("#main-content").html(html);
+        })
+
+        $("#contentTitle").text("$!condConfig.menuName");
+    })
+</script>
+</html>

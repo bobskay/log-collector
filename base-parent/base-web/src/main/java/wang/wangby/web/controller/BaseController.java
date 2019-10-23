@@ -125,10 +125,25 @@ public class BaseController implements InitializingBean {
             return menus;
         }
         Map map = applicationContext.getBeansOfType(BaseController.class);
-        menus = ControllerMenuParser.createMenus(map.values());
+        List<MenuInfo> allMenu = ControllerMenuParser.createMenus(map.values());
+
+        List<MenuInfo> returnValue=new ArrayList<>();
+        for(MenuInfo m:allMenu){
+            boolean ok=true;
+            for(String s:pageProperties.getIgnoreMenus()){
+                if(m.getText().equals(s)){
+                    ok=false;
+                    break;
+                }
+
+            }
+            if(ok){
+                returnValue.add(m);
+            }
+        }
 
         StrBuilder sb = new StrBuilder();
-        TreeUtil.iterator(menus, (m, lay) -> {
+        TreeUtil.iterator(returnValue, (m, lay) -> {
             MenuInfo menu=(MenuInfo)m;
             if(StringUtil.isEmpty(menu.getIcon())){
                 menu.setIcon(pageProperties.getIcon().get(menu.getText()));
@@ -137,7 +152,8 @@ public class BaseController implements InitializingBean {
             return true;
         });
         log.debug("生成默认菜单:\n{}", sb);
-        return menus;
+        menus=returnValue;
+        return returnValue;
     }
 
 

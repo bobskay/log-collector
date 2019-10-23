@@ -143,6 +143,10 @@ public class StringPicker {
         return str;
     }
 
+    public String remain(){
+        return sb.toString();
+    }
+
     public boolean isEmpty(){
         return sb.length()==0;
     }

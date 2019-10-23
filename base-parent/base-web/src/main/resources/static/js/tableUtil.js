@@ -119,7 +119,8 @@ TableUtil.prototype.load=function(url,param,callback){
 
 //通过form表单查询,form必须填写action
 TableUtil.prototype.loadByForm=function(formId,url){
-	var param=$("#"+formId).serializeArray()
+	var param=$("#"+formId).serializeArray();
+	console.log(param)
 	var data={};
 	for(var i=0;i<param.length;i++){
 		data[param[i].name]=param[i].value;

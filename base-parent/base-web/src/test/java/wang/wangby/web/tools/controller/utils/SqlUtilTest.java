@@ -1,11 +1,9 @@
 package wang.wangby.web.tools.controller.utils;
 
 import org.junit.Test;
-import wang.wangby.dao.model.ColumnInfo;
-import wang.wangby.dao.model.TableInfo;
 import wang.wangby.test.TestBase;
-
-import static org.junit.Assert.*;
+import wang.wangby.utils.dao.model.ColumnInfo;
+import wang.wangby.utils.dao.model.TableInfo;
 
 public class SqlUtilTest extends TestBase {
 

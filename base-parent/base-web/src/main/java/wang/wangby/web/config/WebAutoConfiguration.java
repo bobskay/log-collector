@@ -7,13 +7,12 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import wang.wangby.annotation.persistence.Id;
-import wang.wangby.utils.IdWorker;
+import wang.wangby.config.BaseConfig;
 import wang.wangby.web.controller.IndexController;
 import wang.wangby.web.controller.MyErrorController;
 
 @Configuration
-@Import({MvcAutoconfguration.class,MyFilterAutoConfiguration.class})
+@Import({MvcAutoconfguration.class,MyFilterAutoConfiguration.class, BaseConfig.class})
 @Slf4j
 public class WebAutoConfiguration {
     @Bean

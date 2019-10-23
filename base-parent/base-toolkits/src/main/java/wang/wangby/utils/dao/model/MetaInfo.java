@@ -1,4 +1,4 @@
-package wang.wangby.dao.model;
+package wang.wangby.utils.dao.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -6,6 +6,7 @@ import java.sql.Types;
 import java.util.Date;
 
 public class MetaInfo {
+
 	private int type;
 	private String name;
 

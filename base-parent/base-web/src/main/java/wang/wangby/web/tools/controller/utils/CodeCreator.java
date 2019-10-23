@@ -1,7 +1,6 @@
 package wang.wangby.web.tools.controller.utils;
 
 import lombok.Getter;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,20 +10,22 @@ import wang.wangby.annotation.api.Param;
 import wang.wangby.annotation.api.Return;
 import wang.wangby.annotation.persistence.Id;
 import wang.wangby.annotation.persistence.Length;
-import wang.wangby.dao.BaseDao;
-import wang.wangby.dao.model.ColumnInfo;
-import wang.wangby.dao.model.TableInfo;
+import wang.wangby.annotation.persistence.Table;
+import wang.wangby.annotation.web.Menu;
 import wang.wangby.exception.Message;
 import wang.wangby.model.dao.BaseModel;
 import wang.wangby.model.dao.Pagination;
 import wang.wangby.model.request.Response;
-import wang.wangby.service.BaseService;
 import wang.wangby.utils.StringUtil;
+import wang.wangby.utils.dao.model.ColumnInfo;
+import wang.wangby.utils.dao.model.TableInfo;
 import wang.wangby.web.controller.BaseController;
 import wang.wangby.web.tools.controller.vo.JavaClass;
 import wang.wangby.web.tools.controller.vo.JavaField;
 
 import java.util.*;
+
+;
 
 
 @Getter
@@ -61,6 +62,8 @@ public class CodeCreator {
         Set<String> importSet = new HashSet<>();
         importSet.add(lombok.Data.class.getName());
         importSet.add(BaseModel.class.getName());
+        importSet.add(Table.class.getName());
+
 
         for (ColumnInfo col : tableInfo.getColumns()) {
             //主键放在第一位
@@ -84,11 +87,11 @@ public class CodeCreator {
             importSet.add(claz.getName());
         }
         field.setName(col.getColumnName());
-        String comment=col.getColumnComment();
-        if(comment==null){
-            comment="";
+        String comment = col.getColumnComment();
+        if (comment == null) {
+            comment = "";
         }
-        comment=StringUtil.getFirstBefore(comment,",");
+        comment = StringUtil.getFirstBefore(comment, ",");
         field.setRemark(comment);
         List<String> ann = new ArrayList<>();
         if (col.getIsPk()) {
@@ -114,7 +117,7 @@ public class CodeCreator {
         if ("int".equalsIgnoreCase(columnInfo.getDataType())) {
             return Integer.class;
         }
-        if("tinyint".equalsIgnoreCase(columnInfo.getDataType())){
+        if ("tinyint".equalsIgnoreCase(columnInfo.getDataType())) {
             return Integer.class;
         }
         if ("dateTime".equalsIgnoreCase(columnInfo.getDataType())) {
@@ -136,8 +139,8 @@ public class CodeCreator {
         JavaClass service = empty(CodeType.service);
         service.getImportList().add(Autowired.class.getName());
         service.getImportList().add(Service.class.getName());
-        service.getImportList().add(BaseDao.class.getName());
-        service.getImportList().add(BaseService.class.getName());
+        service.getImportList().add("wang.wangby.dao.BaseDao");
+        service.getImportList().add("wang.wangby.service.BaseService");
         service.getImportList().add(CodeType.dao.fillName(packageName, modelName));
         service.getImportList().add(CodeType.model.fillName(packageName, modelName));
         return service;
@@ -147,8 +150,8 @@ public class CodeCreator {
     public JavaClass dao() {
         JavaClass dao = empty(CodeType.dao);
         dao.getImportList().add(CodeType.model.fillName(packageName, modelName));
-        dao.getImportList().add(Mapper.class.getName());
-        dao.getImportList().add(BaseDao.class.getName());
+        dao.getImportList().add("org.apache.ibatis.annotations.Mapper");
+        dao.getImportList().add("wang.wangby.dao.BaseDao");
         return dao;
     }
 
@@ -161,6 +164,7 @@ public class CodeCreator {
         controller.getImportList().add(Remark.class.getName());
         controller.getImportList().add(Param.class.getName());
         controller.getImportList().add(Return.class.getName());
+        controller.getImportList().add(Menu.class.getName());
         controller.getImportList().add(BaseController.class.getName());
         controller.getImportList().add(Pagination.class.getName());
         controller.getImportList().add(Response.class.getName());
@@ -170,7 +174,25 @@ public class CodeCreator {
         return controller;
     }
 
-    public List<JavaField> getFields(){
+    public List<JavaField> getFields() {
         return model().getJavaFieldList();
+    }
+
+    //获得所有字段,并分组
+    public List<List<JavaField>> getFieldRows(int size) {
+        List<JavaField> fields = this.getFields();
+        List result = new ArrayList();
+        List current = new ArrayList();
+        for (JavaField f : fields) {
+            current.add(f);
+            if (current.size() == size) {
+                result.add(current);
+                current = new ArrayList();
+            }
+        }
+        if (current.size() != 0) {
+            result.add(current);
+        }
+        return result;
     }
 }

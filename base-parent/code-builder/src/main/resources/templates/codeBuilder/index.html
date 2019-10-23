@@ -1,0 +1,108 @@
+<div id="app">
+
+    <div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist" id="myTabs">
+            <li role="presentation"><a href="#allInOne" aria-controls="allInOne" role="tab" data-toggle="tab">单实例</a>
+            </li>
+            <li role="presentation"><a href="#data" aria-controls="data" role="tab" data-toggle="tab">dubbo</a></li>
+            <li role="presentation"><a href="#permission" aria-controls="permission" role="tab" data-toggle="tab">spring
+                clould</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane " id="data">
+                #if($zooNode.stat.dataLength!=0)
+                <pre id="dataCotent">$zooNode.dataString</pre>
+                #end
+            </div>
+            <div role="tabpanel" class="tab-pane " id="permission">
+                <table class="table table-bordered ">
+                    <tr>
+                        <th>Id</th>
+                        <th>Scheme</th>
+                        <th>Permission</th>
+                    </tr>
+                    #foreach($acl in $zooNode.acls)
+                    <tr>
+                        <td>$acl.id.id</td>
+                        <td>$acl.id.scheme</td>
+                        <td>$zooNode.getPermsText($acl)</td>
+                    </tr>
+                    #end
+                </table>
+            </div>
+            <div role="tabpanel" class="tab-pane " id="allInOne">
+                <table class="form">
+                    <tr>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="tab-pane ">
+                                <button type="button" onclick="testPage()" class="btn btn-primary">预览</button>
+                            </div>
+                            <div class="tab-pane ">
+                                <button type="button" onclick="createAllInOne()" class="btn btn-primary">发布</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <table class="form">
+        <tr>
+            <td> style="width:10%;">测试服务器</td>
+            <td><input name="hostname"></td>
+            <td style="width:10%;">>用户名</td>
+            <td><input name="username"></td>
+            <td style="width:10%;">>密码</td>
+            <td><input name="password"></td>
+        </tr>
+        <tr>
+            <td>工作目录</td>
+            <td><input name="workdir"></td>
+        </tr>
+        <tr>
+            <td style="width:10%;">菜单名</td>
+            <td>
+                <input name="menuName">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                <textarea style="width: 100%" rows="5" title="sql" name="sql" placeholder="请输入sql语句"></textarea>
+            </td>
+        </tr>
+    </table>
+
+</div>
+<script>
+    var appData = {
+        sql: "",
+        packageName: "",
+        hostname: "myos",
+        username: "root",
+        password: "root",
+        workdir: "/opt/temp",
+        menuName: "测试"
+    }
+    var vue = vueUtil.init({
+        el: "#app",
+        data: appData,
+    })
+
+    function testPage() {
+        vueUtil.submit(vue, "/demo/setConfig", appData, function (id) {
+            window.open("/demo/webIndex?configId=" + id)
+        })
+    }
+
+    function createAllInOne() {
+        vueUtil.submit(vue, "/demo/createAllInOne", appData, function (msg) {
+           alert(msg)
+        })
+    }
+</script>

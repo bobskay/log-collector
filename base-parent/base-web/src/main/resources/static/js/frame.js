@@ -66,10 +66,10 @@ Frame.prototype.update=function (pkName, title,prepareUrl,updateUrl,size) {
     });
 }
 
-Frame.prototype.prepareInsert=function (title, prepareUrl, insertUrl,successCallback,size) {
+Frame.prototype.prepareInsert=function (title, prepareUrl, insertUrl,successCallback,size,param) {
     size=size||2;
     successCallback=successCallback||tableUtil.insertRow;
-    ajaxUtil.html(prepareUrl,null,function(content){
+    ajaxUtil.html(prepareUrl,param,function(content){
         content="<form id='prepareInsert'>"+content+"</form>";
         var vue=null;
         dialog.createPop('prepareInsert',title,content,size,function (data) {

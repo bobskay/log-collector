@@ -147,6 +147,18 @@ public class TemplateUtil{
 		p.setProperty("output.encoding", config.getEncoding());
 		p.setProperty("runtime.log", config.getLog());
 		velocityEngine.init(p);
+		SimpleObject.init(new SimpleObjectConvertor(){
+
+			@Override
+			public String toJson(Object target) {
+				return "SimpleObjectConvertor未初始化" ;
+			}
+
+			@Override
+			public String htmlEscape(String str) {
+				return str;
+			}
+		});
 		return new TemplateUtil(velocityEngine,config.getRoot());
 	}
 }
