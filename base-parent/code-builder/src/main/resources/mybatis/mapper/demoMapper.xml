@@ -14,5 +14,8 @@
         <if test="condition">
             and ${condition}
         </if>
+        <if test="limit">
+            ${limit}
+        </if>
     </select>
 </mapper>

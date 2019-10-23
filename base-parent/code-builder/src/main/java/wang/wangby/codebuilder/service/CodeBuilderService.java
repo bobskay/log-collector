@@ -23,7 +23,7 @@ public class CodeBuilderService {
     @Autowired
     TemplateUtil templateUtil;
 
-    public String createProject(CodeConfig codeConfig,String codeTemplate,String output){
+    public String createCode(CodeConfig codeConfig, String codeTemplate, String output){
         Map context = createContent(codeConfig);
         File src=new File(codeTemplate);
         String rootF=src.getAbsolutePath().replaceAll("\\\\","/");
@@ -76,10 +76,5 @@ public class CodeBuilderService {
         context.put("codeConfig",codeConfig);
         context.put("codeCreator",codeCreator);
         return context;
-    }
-
-    public void createDubbo(CodeConfig codeConfig) {
-        Map context = createContent(codeConfig);
-        String root=CodeBuilderService.class.getResource("/codeTemplate/dubbo").getFile();
     }
 }

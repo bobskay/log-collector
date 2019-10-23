@@ -13,31 +13,22 @@
 
     <dependencies>
         <dependency>
-            <groupId>wang.wangby</groupId>
-            <artifactId>base-dao</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>wang.wangby</groupId>
-            <artifactId>base-web</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>${spring-boot.version}</version>
+            <groupId>wang.wangby</groupId>
+            <artifactId>log-collector-service</artifactId>
         </dependency>
 
         <dependency>
             <groupId>wang.wangby</groupId>
-            <artifactId>log-collector-service</artifactId>
+            <artifactId>web-spring-boot-starter</artifactId>
+            <version>0.1</version>
         </dependency>
+
 
     </dependencies>
 

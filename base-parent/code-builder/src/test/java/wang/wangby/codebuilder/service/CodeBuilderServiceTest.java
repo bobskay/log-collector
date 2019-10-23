@@ -1,10 +1,7 @@
 package wang.wangby.codebuilder.service;
 
-import org.junit.Test;
 import wang.wangby.codebuilder.controller.vo.CodeConfig;
 import wang.wangby.utils.template.TemplateUtil;
-
-import static org.junit.Assert.*;
 
 public class CodeBuilderServiceTest {
     public static void main(String[] args) {
@@ -19,7 +16,7 @@ public class CodeBuilderServiceTest {
         service.templateUtil= TemplateUtil.getDefault();
         String template="E:\\2019\\log-collector\\base-parent\\code-builder\\src\\main\\resources\\codeTemplate\\dubbo";
         String out="E:\\2019\\log-collector\\examples\\dubbo";
-        service.createProject(config,template,out);
+        service.createCode(config,template,out);
     }
 
     public void createSimple(){
@@ -28,7 +25,7 @@ public class CodeBuilderServiceTest {
         service.templateUtil= TemplateUtil.getDefault();
         String template="E:\\2019\\log-collector\\base-parent\\code-builder\\src\\main\\resources\\codeTemplate\\simple";
         String out="E:\\2019\\log-collector\\examples\\hello";
-        service.createProject(config,template,out);
+        service.createCode(config,template,out);
     }
 
 

@@ -11,9 +11,9 @@ import wang.wangby.web.tools.controller.config.ToolsAutoConfiguration;
 import java.io.IOException;
 
 @SpringBootApplication
-@Import({WebAutoConfiguration.class, DaoAutoConfiguration.class, ToolsAutoConfiguration.class})
+@Import({ DaoAutoConfiguration.class,WebAutoConfiguration.class, ToolsAutoConfiguration.class})
 public class CodeBuilderApp {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args)  {
         ConfigurableApplicationContext c= SpringApplication.run(CodeBuilderApp.class, args);
     }
 

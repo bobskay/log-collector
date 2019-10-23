@@ -22,19 +22,18 @@ public class DemoService {
         query.put("condition", getCondition(query));
         query.put("columns", getColumns(query));
 
+        long count = demoDao.getCount(query);
+        if (offset == null || offset > count) {
+            return new Pagination(count, new ArrayList(), offset, limit);
+        }
+
         if (offset == null) {
             offset = 0;
         }
         if (limit == null) {
             limit = Pagination.DEFAULT_SIZE;
         }
-        long count = demoDao.getCount(query);
-        if (offset == null || offset > count) {
-            return new Pagination(count, new ArrayList(), offset, limit);
-        }
-
-        query.getExt().put("offset", offset);
-        query.getExt().put("limit", limit);
+        query.put("limit", "limit " + offset + "," + limit);
         List list = demoDao.select(query);
         return new Pagination(count, list, offset, limit);
     }

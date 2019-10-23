@@ -1,0 +1,17 @@
+my:
+  web:
+    index:
+      title: "${codeConfig.appName}"
+      indexContentUrl: ""
+      ignore-menus: ["工具箱"]
+
+spring:
+  datasource:
+    username: ${codeConfig.datasource.username}
+    password: ${codeConfig.datasource.password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${codeConfig.datasource.url}
+    druid:
+      max-wait: 3000
+  application:
+    name: ${codeConfig.appName}

@@ -20,7 +20,6 @@ import java.util.List;
 
 @Configuration
 @Import(BaseConfig.class)
-@ConditionalOnClass(SqlSessionFactory.class)
 @Slf4j
 public class DaoAutoConfiguration {
 
@@ -29,7 +28,6 @@ public class DaoAutoConfiguration {
     public DaoProperties daoProperties(){
         return new DaoProperties();
     }
-
 
     @Bean
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource, DaoProperties daoProperties,TemplateUtil templateUtil) throws Exception {
@@ -50,5 +48,6 @@ public class DaoAutoConfiguration {
         log.info("初始化主键生成器成功,当前机器号:"+daoProperties.getMachineNo());
         return idWorker;
     }
+
 
 }

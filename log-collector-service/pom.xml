@@ -19,12 +19,8 @@
 
         <dependency>
             <groupId>wang.wangby</groupId>
-            <artifactId>base-toolkits</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>wang.wangby</groupId>
-            <artifactId>base-dao</artifactId>
+            <artifactId>dao-spring-boot-starter</artifactId>
+            <version>0.1</version>
         </dependency>
     </dependencies>
 </project>

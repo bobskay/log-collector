@@ -84,6 +84,18 @@
                 <version>${druid.version}</version>
             </dependency>
 
+
+            <dependency>
+                <groupId>wang.wangby</groupId>
+                <artifactId>dao-spring-boot-starter</artifactId>
+                <version>${my.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>wang.wangby</groupId>
+                <artifactId>web-spring-boot-starter</artifactId>
+                <version>${my.version}</version>
+            </dependency>
         </dependencies>
 
     </dependencyManagement>

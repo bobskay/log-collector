@@ -32,4 +32,5 @@ public class Message extends RuntimeException{
 		return message;
 	}
 
+
 }

@@ -20,6 +20,10 @@ public class CodeConfig {
     private String modelName;
     @Remark("项目名称")
     private String appName;
+    @Remark("文件生成目录")
+    private String outputDir;
+    @Remark("项目类型")
+    private String projectType;
 
     private DubboConfig dubbo=new DubboConfig();
 
@@ -31,14 +35,23 @@ public class CodeConfig {
     }
 
     public String getUpModelName(){
+        if(modelName==null){
+            return null;
+        }
         return StringUtil.firstUp(modelName);
     }
 
     public String getUpAppName(){
+        if(appName==null){
+            return null;
+        }
         return StringUtil.firstUp(appName);
     }
 
     public String getPackageDir(){
+        if(packageName==null){
+            return null;
+        }
         return packageName.replace('.','/');
     }
 
