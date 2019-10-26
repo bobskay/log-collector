@@ -1,6 +1,4 @@
 <div id="app">
-
-
     <table class="form">
         <tr>
             <td style="width:10%;">测试服务器</td>
@@ -21,12 +19,18 @@
             </td>
             <td>文件生成目录</td>
             <td><input name="outputDir"></td>
+            <td>运行端口</td>
+            <td>
+                <input name="serverPort"/>
+            </td>
         </tr>
         <tr>
             <td>项目名</td>
             <td>
                 <input name="appName">
             </td>
+            <td>包名</td>
+            <td><input name="packageName"/></td>
             <td>主菜单名称</td>
             <td>
                 <input name="menuName">
@@ -34,36 +38,68 @@
         </tr>
         <tr>
             <td colspan="6">
-                <textarea style="width: 100%" rows="5" title="sql" name="sql" placeholder="请输入sql语句"></textarea>
+                <textarea style="width: 100%" rows="10" title="sql" name="sql" placeholder="请输入sql语句">
+
+                </textarea>
             </td>
         </tr>
 
         <tr>
-            <td>
-                <div class="tab-pane ">
+            <td colspan="6">
                     <button type="button" onclick="testPage()" class="btn btn-primary">预览</button>
-                    <button type="button" onclick="crateCode()" class="btn btn-primary">生成代码</button>
+                    <button type="button" onclick="createCode()" class="btn btn-primary">生成代码</button>
                     <button type="button" onclick="runApp()" class="btn btn-primary">本地运行</button>
-                </div>
+                    <button type="button" onclick="showAllRunning()" class="btn btn-primary">所有程序</button>
+
+
             </td>
         </tr>
     </table>
-
-
+</div>
+<style>
+    .cmd{
+        border: 1px solid;
+        margin: 23px 1px 1px 1px;
+        font-size:15px;
+        background-color:black;
+        color:#ccc;
+    }
+</style>
+<div id="preContainer">
+<pre class="cmd" id="runningInfo" style="width: 100%"></pre>
 </div>
 <script>
     var appData = {
-        sql: "",
+        sql: "CREATE TABLE `t_bookInfo` (\n" +
+            "  `bookId` bigint(20) NOT NULL COMMENT '图书id',\n" +
+            "  `bookName` varchar(64) DEFAULT NULL COMMENT '名称',\n" +
+            "  `publication` datetime DEFAULT NULL COMMENT '发行日期',\n" +
+            "  `price` int(11) DEFAULT NULL COMMENT '价格',\n" +
+            "  `isbn` varchar(64) DEFAULT NULL COMMENT 'isbn',\n" +
+            "  `valid` tinyint(4) DEFAULT NULL COMMENT '是否有效',\n" +
+            "  `remain` int(11) DEFAULT NULL COMMENT '剩余',\n" +
+            "  `createTime` datetime DEFAULT NULL COMMENT '创建时间',\n" +
+            "  PRIMARY KEY (`bookId`),\n" +
+            "  KEY `NewIndex1` (`isbn`)\n" +
+            ") ENGINE=InnoDB DEFAULT CHARSET=latin1",
         packageName: "",
         hostname: "myos",
         username: "root",
         password: "root",
         workdir: "/opt/temp",
+        outputDir:"/2019/log-collector/examples",
         menuName: "首页",
         appName: "helloWorld",
-        outputDir:"",
-        projectType:"simple"
+        projectType:"simple",
+        packageName:"wang.wangby",
+        serverPort:"8888",
+        datasource:{
+            username:"root",
+            password:"123456",
+            url:"jdbc:mysql://192.168.2.11:3306/test",
+        }
     }
+
     var vue = vueUtil.init({
         el: "#app",
         data: appData,
@@ -77,7 +113,42 @@
 
     function createCode() {
         vueUtil.submit(vue, "$path/createCode", appData, function (msg) {
-           alert(msg)
+           dialog.alert(msg)
         })
+    }
+
+    var currentId="";
+    function runApp() {
+        $("#runningInfo").html("");
+        vueUtil.submit(vue, "$path/runApp", appData, function (id) {
+            currentId=id;
+            getRunningInfo();
+        })
+    }
+
+    function getRunningInfo() {
+        if(!currentId){
+            return "";
+        }
+        ajaxUtil.json("$path/getRunningInfo","id="+currentId,function (resp) {
+            if(resp.success){
+                var data=resp.data;
+                for(var i=0;i<data.length;i++){
+                    if(data[i]=="程序已经执行完毕"){
+                        currentId="";
+                        return;
+                    }
+                    $("#runningInfo").append("\n"+data[i]);
+                }
+                window.scroll(0,document.body.scrollHeight+document.body.scrollTop)
+                window.setTimeout(getRunningInfo,1000);
+            }
+        })
+    }
+
+    function showAllRunning() {
+        ajaxUtil.html("$path/showRunning","",function(content){
+            dialog.createPop("showRunning","运行中的程序",content,3,null);
+        });
     }
 </script>

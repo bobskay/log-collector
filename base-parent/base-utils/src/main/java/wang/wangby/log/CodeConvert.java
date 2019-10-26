@@ -15,10 +15,9 @@ public class CodeConvert extends ClassicConverter {
     	}
     	int pos= trace[0].getClassName().lastIndexOf('.');
     	String className=trace[0].getClassName().substring(pos+1);
-
 		//如果不是debug和info,就打印代码位置
 		if(event.getLevel()==Level.DEBUG||event.getLevel()==Level.INFO) {
-			return className+"."+trace[0].getMethodName()+":"+trace[0].getLineNumber();
+			return className+"."+trace[0].getMethodName()+":"+trace[0].getLineNumber() ;
 		}
     	return className+"."+trace[0].getMethodName()+"("+ trace[0].getFileName()+":"+trace[0].getLineNumber()+")";
     }  

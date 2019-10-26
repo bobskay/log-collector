@@ -24,6 +24,8 @@ public class CodeConfig {
     private String outputDir;
     @Remark("项目类型")
     private String projectType;
+    @Remark("启动端口")
+    private String serverPort;
 
     private DubboConfig dubbo=new DubboConfig();
 

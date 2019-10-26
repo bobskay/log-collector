@@ -12,7 +12,7 @@ import wang.wangby.web.controller.IndexController;
 import wang.wangby.web.controller.MyErrorController;
 
 @Configuration
-@Import({MvcAutoconfguration.class,MyFilterAutoConfiguration.class, BaseConfig.class})
+@Import({MvcAutoconfguration.class,MyFilterAutoConfiguration.class, BaseConfig.class,MyErrorController.class})
 @Slf4j
 public class WebAutoConfiguration {
     @Bean
@@ -27,11 +27,4 @@ public class WebAutoConfiguration {
         log.debug("加载默认首页:"+indexPageProperties);
         return new IndexController();
     }
-
-    @Bean
-    public ErrorController myErrorController(){
-        return new MyErrorController();
-    }
-
-
 }

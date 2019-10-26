@@ -11,6 +11,6 @@ import wang.wangby.web.tools.controller.config.ToolsAutoConfiguration;
 @Import({WebAutoConfiguration.class, DaoAutoConfiguration.class, ToolsAutoConfiguration.class})
 public class ${codeConfig.upAppName}App {
     public static void main(String[] args) {
-        SpringApplication.run(HelloApp.class, args);
+        SpringApplication.run(${codeConfig.upAppName}App.class, args);
     }
 }

@@ -5,6 +5,9 @@ my:
       indexContentUrl: ""
       ignore-menus: ["工具箱"]
 
+server:
+   port: ${codeConfig.serverPort}
+
 spring:
   datasource:
     username: ${codeConfig.datasource.username}

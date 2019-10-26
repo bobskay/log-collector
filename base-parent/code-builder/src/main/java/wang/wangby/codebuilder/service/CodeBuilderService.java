@@ -29,7 +29,7 @@ public class CodeBuilderService {
         String rootF=src.getAbsolutePath().replaceAll("\\\\","/");
         FileUtil.iteratorFile(src,(dir,file)->{
             String dirF=dir.getAbsolutePath().replaceAll("\\\\","/");
-            String targetDir=output+"/"+dirF.replace(rootF,"");
+            String targetDir=output+"/"+dirF.substring(rootF.length());
             targetDir=templateUtil.parseText(targetDir,context);
             File createDir=new File(targetDir);
             if(!createDir.exists()){
@@ -40,7 +40,7 @@ public class CodeBuilderService {
                 return true;
             }
             String fileF=file.getAbsolutePath().replaceAll("\\\\","/");
-            String targetFile=output+"/"+fileF.replace(rootF,"");
+            String targetFile=output+"/"+fileF.substring(rootF.length());
             targetFile=templateUtil.parseText(targetFile,context);
             targetFile=targetFile.substring(0,targetFile.length()-3);
             String content=FileUtil.getText(file.getAbsolutePath());
